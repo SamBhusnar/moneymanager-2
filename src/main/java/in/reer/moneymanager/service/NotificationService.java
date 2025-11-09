@@ -38,7 +38,7 @@ public class NotificationService {
                     + "<br><br>"
                     + "Thank you, <br>"
                     + "Money Manager team";
-            emailService.sendEmail(profile.getEmail(), "Daily remainder add your Income and Expence to Money Manager", body);
+            emailService.sendEmailWithRestTemplate(profile.getEmail(), "Daily remainder add your Income and Expence to Money Manager", body);
         }
         log.info("Job ended : sendDailyIncomeExpenceReminder()");
 
@@ -68,7 +68,7 @@ public class NotificationService {
                 String body = "Hi " + profile.getFullName() + ", <br><br>"
                         + "Here is summary of yor expences for today "
                         + table + "<br/><br/><br/>";
-                emailService.sendEmail(profile.getEmail(), "Daily remainder of    your   Expence account of Money Manager application <br> team moneymanager! ", body);
+                emailService.sendEmailWithRestTemplate(profile.getEmail(), "Daily remainder of    your   Expence account of Money Manager application <br> team moneymanager! ", body);
             }
 
         }
