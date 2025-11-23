@@ -29,10 +29,11 @@ public class IncomeEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;
     private LocalDate date;
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)

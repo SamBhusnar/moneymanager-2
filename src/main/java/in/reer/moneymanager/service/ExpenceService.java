@@ -31,8 +31,17 @@ public class ExpenceService {
         return byProfileIdAndDateBetween.stream().map(this::toDto).collect(Collectors.toList());
     }
 
+    // Before adding expense to the corresponding category check the category have type as 'Expense'  or not
+    public void checkCategoryType(Long categoryId) {
+        CategoryEntity category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
+        if (!category.getType().equalsIgnoreCase("Expense")) {
+            throw new RuntimeException("Category type must be 'Expense'");
+        }
+    }
+
     public ExpenseDTO addExpense(ExpenseDTO dto) {
         ProfileEntity profile = profileService.getCurrentProfile();
+        checkCategoryType(dto.getCategoryId());
         CategoryEntity category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
         // check given category belong the current profile
         if (!category.getProfile().getId().equals(profile.getId())) {
@@ -53,6 +62,7 @@ public class ExpenceService {
         }
         expenseRepository.delete(expenceEntity);
     }
+
 
     // Get latest 5 expence for crrent profile with the help this method : findTop5ByProfileIdOrderByDateDesc
     public List<ExpenseDTO> getLatestExpenses() {
@@ -80,7 +90,7 @@ public class ExpenceService {
     public List<ExpenseDTO> getExpensesForProfileOnDate(Long profileId, LocalDate date) {
         List<ExpenceEntity> expenses = expenseRepository.findByProfileIdAndDate(profileId, date);
         return expenses.stream().map(this::toDto).collect(Collectors.toList());
-        
+
     }
 
     // helper methods

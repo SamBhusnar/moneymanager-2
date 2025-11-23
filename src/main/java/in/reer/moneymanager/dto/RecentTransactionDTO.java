@@ -18,10 +18,10 @@ public class RecentTransactionDTO {
     private Long profileId;
     private String icon;
     private String name;
-    private String type;
+    private String type;// category allowed only one either income or expense
     private BigDecimal amount;
     private LocalDate date;
-    private String category;
+    private String category;// category name
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

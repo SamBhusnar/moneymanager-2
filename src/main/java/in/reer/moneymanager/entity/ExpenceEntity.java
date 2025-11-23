@@ -26,10 +26,11 @@ public class ExpenceEntity {
     private String icon;
     private LocalDate date;
     private BigDecimal amount;
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)

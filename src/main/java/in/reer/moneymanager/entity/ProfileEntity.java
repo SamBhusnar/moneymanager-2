@@ -11,7 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="tbl_profiles")
+@Table(name = "tbl_profiles")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,22 +20,24 @@ public class ProfileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private  String fullName;
+    private String fullName;
     @Column(unique = true)
-    private  String email;
-    private  String password;
-    private  String profileImageUrl;
-    @Column(updatable = false)
+    private String email;
+    private String password;
+    private String profileImageUrl;
+    @Column(updatable = false, nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
     private Boolean isActive;
-    private  String activationToken;
+    private String activationToken;
+
     @PrePersist
-    private void prePersist(){
-        if(this.isActive==null){
-            this.isActive=false;
+    private void prePersist() {
+        if (this.isActive == null) {
+            this.isActive = false;
         }
     }
 }

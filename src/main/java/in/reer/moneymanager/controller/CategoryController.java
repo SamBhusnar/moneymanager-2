@@ -40,7 +40,7 @@ public class CategoryController {
         return categoryService.getCategoriesByTypeForCurrentProfile(type);
     }
 
-    // update category
+    // update category  
     @PutMapping("/{categoryId}")
     public ResponseEntity<?> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryDTO categoryDTO) {
         try {

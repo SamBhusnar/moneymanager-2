@@ -1,5 +1,6 @@
 package in.reer.moneymanager.service;
 
+import in.reer.moneymanager.dto.ExpenseDTO;
 import in.reer.moneymanager.dto.IncomeDTO;
 import in.reer.moneymanager.dto.RecentTransactionDTO;
 import in.reer.moneymanager.entity.ProfileEntity;
@@ -23,7 +24,7 @@ public class DashBoardService {
         ProfileEntity profile = profileService.getCurrentProfile();
         Map<String, Object> response = new LinkedHashMap<>();
         List<IncomeDTO> latestIncome = incomeService.getLatestIncome();
-        List<IncomeDTO> latestExpenses = incomeService.getLatestIncome();
+        List<ExpenseDTO> latestExpenses = expenceService.getLatestExpenses();
         List<RecentTransactionDTO> transactionDTOS = concat(latestIncome.stream().map(incomeDTO ->
                 RecentTransactionDTO.builder()
                         .id(incomeDTO.getId())

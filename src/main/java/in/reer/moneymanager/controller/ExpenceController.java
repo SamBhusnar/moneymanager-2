@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/expences")
+@RequestMapping("/expenses")
 public class ExpenceController {
     private final ExpenceService expenceService;
 

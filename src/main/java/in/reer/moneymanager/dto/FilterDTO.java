@@ -18,4 +18,5 @@ public class FilterDTO {
     private String keyword;
     private String sortFiled;
     private String sortOrder;
+    
 }

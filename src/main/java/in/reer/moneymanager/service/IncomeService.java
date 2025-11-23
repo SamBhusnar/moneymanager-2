@@ -5,6 +5,7 @@ import in.reer.moneymanager.entity.CategoryEntity;
 import in.reer.moneymanager.entity.IncomeEntity;
 import in.reer.moneymanager.entity.ProfileEntity;
 import in.reer.moneymanager.repository.CategoryRepository;
+import in.reer.moneymanager.repository.ExpenseRepository;
 import in.reer.moneymanager.repository.IncomeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -21,9 +22,10 @@ public class IncomeService {
     private final IncomeRepository incomeRepository;
     private final ProfileService profileService;
     private final CategoryRepository categoryRepository;
+    private final ExpenseRepository expenseRepository;
 
     // Retrieves all expense for current month/based on the start and end date
-    public List<IncomeDTO> getCurrentMonthExpenses() {
+    public List<IncomeDTO> getCurrentMonthIncomes() {
         ProfileEntity profile = profileService.getCurrentProfile();
         LocalDate startDate = LocalDate.now().withDayOfMonth(1);
         LocalDate endDate = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
@@ -34,19 +36,20 @@ public class IncomeService {
     // Get latest 5 income for current profile with the help this method : findTop5ByProfileIdOrderByDateDesc
     public List<IncomeDTO> getLatestIncome() {
         ProfileEntity profile = profileService.getCurrentProfile();
-        List<IncomeEntity> latestExpenses = incomeRepository.findTop5ByProfileIdOrderByDateDesc(profile.getId());
-        return latestExpenses.stream().map(this::toDto).collect(Collectors.toList());
+        List<IncomeEntity> latestIncomes = incomeRepository.findTop5ByProfileIdOrderByDateDesc(profile.getId());
+        return latestIncomes.stream().map(this::toDto).collect(Collectors.toList());
     }
+
 
     // Get the total sum of income for current profile
     public BigDecimal getTotalIncomes() {
         ProfileEntity profile = profileService.getCurrentProfile();
-        return incomeRepository.findTotalExpenseByProfileId(profile.getId()) != null ? incomeRepository.findTotalExpenseByProfileId(profile.getId()) : BigDecimal.ZERO;
+        return incomeRepository.findTotalIncomeByProfileId(profile.getId()) != null ? incomeRepository.findTotalIncomeByProfileId(profile.getId()) : BigDecimal.ZERO;
     }
 
     // delete income by id of current profile
 
-    public void deleteExpenseById(Long incomeId) {
+    public void deleteIncomeById(Long incomeId) {
         ProfileEntity profile = profileService.getCurrentProfile();
         IncomeEntity incomeEntity = incomeRepository.findById(incomeId).orElseThrow(() -> new RuntimeException("Income not found"));
         if (!incomeEntity.getProfile().getId().equals(profile.getId())) {
@@ -55,8 +58,9 @@ public class IncomeService {
         incomeRepository.delete(incomeEntity);
     }
 
-    public IncomeDTO addExpense(IncomeDTO dto) {
+    public IncomeDTO addIncome(IncomeDTO dto) {
         ProfileEntity profile = profileService.getCurrentProfile();
+        checkIncomeCategoryType(dto.getCategoryId());
         CategoryEntity category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
         // check given category belong the current profile
         if (!category.getProfile().getId().equals(profile.getId())) {
@@ -73,6 +77,14 @@ public class IncomeService {
         ProfileEntity currentProfile = profileService.getCurrentProfile();
         List<IncomeEntity> list = incomeRepository.findByProfileIdAndDateBetweenAndIncomeNameContainingIgnoreCase(currentProfile.getId(), startDate, endDate, keyword, sort);
         return list.stream().map(this::toDto).toList();
+    }
+
+    // check corresponding income categories type is income or expense
+    public void checkIncomeCategoryType(Long categoryId) {
+        CategoryEntity category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
+        if (!category.getType().equalsIgnoreCase("income")) {
+            throw new RuntimeException("You are trying to add income to  category which have expense as there type ! ");
+        }
     }
 
 

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class CategoryDTO {
     private Long id;
     private String name;
-    private String type;
+    private String type;// category allowed only one either income or expense
     private String icon;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
