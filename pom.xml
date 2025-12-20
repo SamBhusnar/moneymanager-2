@@ -106,6 +106,12 @@
             <artifactId>ooxml-schemas</artifactId>
             <version>1.4</version> <!-- stable -->
         </dependency>
+<!--        spring-boog-startetest-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
